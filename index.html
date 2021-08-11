@@ -88,6 +88,8 @@
           for(x in data.notes) {
             if(frequency === data.notes[x]) {
               text.innerHTML = x +' '+ data.notes[x];
+            } else {
+              text.innerHTML = 0 + 'HZ';
             }
           }
         });
