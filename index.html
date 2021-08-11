@@ -83,10 +83,12 @@
       cycles = cross / 2;
       frequency = cycles / epoch;
 
+      frequency = Number(frequency).toFixed(1);
+
       $.getJSON("notes.json", function(data) {
         $(document).ready(function() {
           for(x in data.notes) {
-            if(Number(frequency).toFixed(1).toString == data.notes[x]) {
+            if(frequency == data.notes[x]) {
               text.innerHTML = x +' '+ frequency;
             } else {
               text.innerHTML = 0 + 'HZ';
