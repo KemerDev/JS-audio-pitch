@@ -87,6 +87,7 @@
       $.getJSON("notes.json", function(data) {
         $(document).ready(function() {
           for(x in data.notes) {
+            console.log(data.notes[x]);
             if(Number(frequency).toFixed(1) == data.notes[x]) {
               text.innerHTML = x +' '+ frequency;
             } else {
