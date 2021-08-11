@@ -86,8 +86,8 @@
       $.getJSON("notes.json", function(data) {
         $(document).ready(function() {
           for(x in data.notes) {
-            if(frequency === x) {
-              text.innerHTML = x +' '+ data.notes[x];
+            if(frequency == data.notes[x]) {
+              text.innerHTML = x +' '+ frequency;
             } else {
               text.innerHTML = 0 + 'HZ';
             }
