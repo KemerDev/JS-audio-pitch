@@ -83,8 +83,6 @@
       cycles = cross / 2;
       frequency = cycles / epoch;
 
-      console.log(Number(frequency).toFixed(1));
-
       $.getJSON("notes.json", function(data) {
         $(document).ready(function() {
           for(x in data.notes) {
