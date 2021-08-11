@@ -86,8 +86,9 @@
       $.getJSON("notes.json", function(data) {
         $(document).ready(function() {
           for(x in data.notes) {
-            console.log(data.notes[x]);
-            console.log(x);
+            if(frequency === data.notes[x]) {
+              text.innerHTML = x +' '+ data.notes[x];
+            }
           }
         });
       });
