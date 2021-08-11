@@ -78,12 +78,13 @@
       cycles = cross / 2;
       frequency = cycles / epoch;
 
-      if(frequency > 1600 || frequency < 84) {
-        text.innerHTML = 0 + ' HZ';
-      } else {
-        text.innerHTML = Number(frequency).toFixed(1) + ' HZ';
-      }
-      console.log(1);
+      $.getJSON("info.json", function(data) {
+        $(document).ready(function() {
+          for(x in data.notes) {
+            console.log(x);
+          }
+        });
+      });
     }
   };
 
