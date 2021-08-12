@@ -27,7 +27,7 @@
       var context = new AudioContext();
 
       var compress = context.createDynamicsCompressor();
-      compress.threshold.value = -24;
+      compress.threshold.value = 0;
 
       var source = context.createMediaStreamSource(stream);
       var processor = context.createScriptProcessor(4096, 1, 1);
@@ -44,8 +44,6 @@
         if(buffer.length === 40960) {
 
           pitch_calc(buffer, buffer.length, e.inputBuffer.sampleRate);
-          buffer = [];
-
         }
       };
 
@@ -53,18 +51,10 @@
     //fill a big buffer, the bigger the buffer the more accurate the detection
 
     function create_buff(samples, size) {
-
-      var lastInput = 0;
-      var output = size;
-
+      buffer = [];
 
       for (var i = 0; i < size; i++) {
         buffer.push(samples[i]);
-      }
-
-      for(var i = 0; i < size; i++) {
-        output[i] = (buffer[i] - lastInput) / 2;
-        lastInput = buffer[i];
       }
 
       return buffer;
