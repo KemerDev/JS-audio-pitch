@@ -27,10 +27,10 @@
       var context = new AudioContext();
 
       var compress = context.createDynamicsCompressor();
-      compress.threshold.value = 0;
+      compress.threshold.value = -100;
 
       var source = context.createMediaStreamSource(stream);
-      var processor = context.createScriptProcessor(4096, 1, 1);
+      var processor = context.createScriptProcessor(1024, 1, 1);
 
       var buffer = [];
 
@@ -39,10 +39,9 @@
 
       processor.onaudioprocess = function(e) {
 
-        create_buff(e.inputBuffer.getChannelData(0, 1), e.inputBuffer.length);
+        create_buff(e.inputBuffer.getChannelData(0), e.inputBuffer.length);
 
         if(buffer.length === 40960) {
-
           pitch_calc(buffer, buffer.length, e.inputBuffer.sampleRate);
           buffer = [];
         }
