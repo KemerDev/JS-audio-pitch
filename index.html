@@ -24,9 +24,18 @@
     const handleSuccess = function(stream) {
       const text = document.getElementById('text');
 
-      const context = new AudioContext({ latencyHint: 'interactive'});
-      const source = context.createMediaStreamSource(stream);
-      const processor = context.createScriptProcessor(4096, 1, 1);
+      var context = new AudioContext({ latencyHint: 'interactive'});
+
+      var compress = context.createDynamicsCompressor();
+      compress.threshold.value = -30;
+
+      var filter = context.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.value = 1650;
+
+      var source = context.createMediaStreamSource(stream);
+      var processor = context.createScriptProcessor(4096, 1, 1);
+
       var buffer = [];
 
       source.connect(processor);
@@ -37,8 +46,6 @@
         create_buff(e.inputBuffer.getChannelData(0, 1), e.inputBuffer.length);
 
         if(buffer.length === 40960) {
-
-          console.log(buffer);
 
           pitch_calc(buffer, buffer.length, e.inputBuffer.sampleRate);
           buffer = [];
@@ -85,7 +92,7 @@
       cycles = cross / 2;
       frequency = cycles / epoch;
 
-      //console.log(Number(frequency).toFixed(1));
+      console.log(Number(frequency).toFixed(1));
 
       /*$.getJSON("notes.json", function(data) {
         $(document).ready(function() {
