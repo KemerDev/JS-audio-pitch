@@ -36,7 +36,7 @@
 
       processor.onaudioprocess = function(e) {
 
-        create_buff(e.inputBuffer.getChannelData(0, 1), e.inputBuffer.length);
+        create_buff(e.inputBuffer.getChannelData(0), e.inputBuffer.length);
 
         if(buffer.length === 40960) {
 
@@ -50,7 +50,7 @@
 
     function create_buff(samples, size) {
 
-      for (var i = 0; i < size; i++) {
+      for (var i = 0; i < size - 1; i++) {
         buffer.push(samples[i]);
       }
 
