@@ -51,11 +51,7 @@
     //fill a big buffer, the bigger the buffer the more accurate the detection
 
     function create_buff(samples, size) {
-      buffer = [];
-
-      for (var i = 0; i < size; i++) {
-        buffer.push(samples[i]);
-      }
+      buffer.push(samples);
 
       return buffer;
     }
