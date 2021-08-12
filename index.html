@@ -27,7 +27,7 @@
       var context = new AudioContext();
 
       var compress = context.createDynamicsCompressor();
-      compress.threshold.value = -85;
+      compress.threshold.value = -24;
 
       var source = context.createMediaStreamSource(stream);
       var processor = context.createScriptProcessor(4096, 1, 1);
