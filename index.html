@@ -27,11 +27,12 @@
       var context = new AudioContext({ latencyHint: 'interactive'});
 
       var compress = context.createDynamicsCompressor();
-      compress.threshold.value = 0;
+      compress.threshold.value = -85;
 
-      /*var filter = context.createBiquadFilter();
+      var filter = context.createBiquadFilter();
       filter.type = "bandpass";
-      filter.frequency.value = 1650;*/
+      filter.frequency.value = 1650;
+      filter.frequency.value = 83;
 
       var source = context.createMediaStreamSource(stream);
       var processor = context.createScriptProcessor(4096, 1, 1);
