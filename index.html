@@ -27,7 +27,7 @@
       var context = new AudioContext({ latencyHint: 'interactive'});
 
       var compress = context.createDynamicsCompressor();
-      compress.threshold.value = -60;
+      compress.threshold.value = 0;
 
       /*var filter = context.createBiquadFilter();
       filter.type = "bandpass";
