@@ -38,6 +38,8 @@
 
         if(buffer.length === 40960) {
 
+          console.log(buffer);
+
           pitch_calc(buffer, buffer.length, e.inputBuffer.sampleRate);
           buffer = [];
 
@@ -83,9 +85,9 @@
       cycles = cross / 2;
       frequency = cycles / epoch;
 
-      console.log(Number(frequency).toFixed(1));
+      //console.log(Number(frequency).toFixed(1));
 
-      $.getJSON("notes.json", function(data) {
+      /*$.getJSON("notes.json", function(data) {
         $(document).ready(function() {
           for(x in data.notes) {
             if(Number(frequency).toFixed(1) == data.notes[x]) {
@@ -95,7 +97,7 @@
             }
           }
         });
-      });
+      });*/
     }
   };
 
