@@ -24,11 +24,10 @@
     const handleSuccess = function(stream) {
       const text = document.getElementById('text');
 
-      var context = new AudioContext({ latencyHint: 'interactive'});
+      var context = new AudioContext();
 
-      var filter = context.createBiquadFilter();
-      filter.type = "bandpass";
-      filter.frequency.value = 83;
+      var compress = context.createDynamicsCompressor();
+      compress.threshold.value = -85;
 
       var source = context.createMediaStreamSource(stream);
       var processor = context.createScriptProcessor(4096, 1, 1);
