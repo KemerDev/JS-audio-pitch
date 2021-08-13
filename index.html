@@ -76,13 +76,11 @@
 
 
       console.log(Number(frequency).toFixed(1));
-      if(Number(frequency).toFixed(1) < 1600 || Number(frequency).toFixed(1) > 83) {
+      if(frequency < 1600 || frequency > 83) {
         text.innerHTML = Number(frequency).toFixed(1);
       } else {
         text.innerHTML = 0 + 'HZ';
       }
-
-
       /*$.getJSON("notes.json", function(data) {
         $(document).ready(function() {
           for(x in data.notes) {
