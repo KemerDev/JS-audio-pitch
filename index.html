@@ -39,8 +39,13 @@
         create_buff(e.inputBuffer.getChannelData(0, 1), e.inputBuffer.length);
 
         if(buffer.length === 40960) {
-          pitch_calc(buffer, buffer.length, e.inputBuffer.sampleRate);
-          buffer.length = 0;
+          if(buffer[0] > 0.001 || buffer[0] < -0.001) {
+            pitch_calc(buffer, buffer.length, e.inputBuffer.sampleRate);
+            buffer.length = 0;
+          } else {
+            text.innerHTML = 0 + " HZ";
+          }
+
         }
       };
 
@@ -76,11 +81,9 @@
 
 
       console.log(Number(frequency).toFixed(1));
-      if(frequency < 1600 || frequency > 83) {
-        text.innerHTML = Number(frequency).toFixed(1);
-      } else {
-        text.innerHTML = 0 + 'HZ';
-      }
+
+      text.innerHTML = Number(frequency).toFixed(1);
+
       /*$.getJSON("notes.json", function(data) {
         $(document).ready(function() {
           for(x in data.notes) {
