@@ -39,7 +39,7 @@
         create_buff(e.inputBuffer.getChannelData(0, 1), e.inputBuffer.length);
 
         if(buffer.length === 40960) {
-          if(buffer[0] > 0.001 || buffer[0] < -0.001) {
+          if(buffer[0] > 0.0001 || buffer[0] < -0.0001) {
             pitch_calc(buffer, buffer.length, e.inputBuffer.sampleRate);
             buffer.length = 0;
           } else {
