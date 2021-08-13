@@ -36,8 +36,10 @@
 
       processor.onaudioprocess = function(e) {
 
-        if(e.inputBuffer.getChannelData(0) > 0.01 || e.inputBuffer.getChannelData(0) < -0.0001) {
+        if(e.inputBuffer.getChannelData(0)[0] > 0.0001 || e.inputBuffer.getChannelData(0)[0] < -0.0001) {
           create_buff(e.inputBuffer.getChannelData(0), e.inputBuffer.length);
+        } else {
+          text.innerHTML = 0 + " hz";
         }
 
         if(buffer.length === 40960) {
