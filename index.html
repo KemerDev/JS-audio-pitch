@@ -32,10 +32,6 @@
       var biquadFilter = context.createBiquadFilter();
       biquadFilter.type = "lowpass";
       biquadFilter.frequency.value = 1800;
-
-      var analyser = context.createAnalyser();
-
-      biquadFilter.connect(analyser);
       source.connect(biquadFilter);
 
       var buffer = [];
