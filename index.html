@@ -47,6 +47,7 @@
           low_pass();
           pitch_calc(output, output.length, e.inputBuffer.sampleRate);
           buffer.length = 0;
+          output.length = 0;
         }
       };
 
