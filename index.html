@@ -44,6 +44,7 @@
         }
 
         if(buffer.length === 40960) {
+
           low_pass(buffer, buffer.length);
           pitch_calc(output, output.length, e.inputBuffer.sampleRate);
 
@@ -59,6 +60,7 @@
       for (var i = 0; i < size; i++) {
         buffer.push(samples[i]);
       }
+
       return buffer;
     }
 
@@ -67,8 +69,9 @@
 
       for(var i = 0; i < size; i++) {
         output[i] = (samples[i] + lastinput) / 2;
-        lastinput += samples[i];
+        lastinput = samples[i];
       }
+
       return output;
     }
 
