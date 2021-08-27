@@ -44,7 +44,7 @@
         }
 
         if(buffer.length === 40960) {
-          buffer = low_pass(buffer, buffer.length);
+          low_pass(buffer, buffer.length);
           pitch_calc(output, output.length, e.inputBuffer.sampleRate);
 
           buffer.length = 0;
