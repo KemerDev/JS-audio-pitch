@@ -36,7 +36,7 @@
       var analyser = context.createAnalyser();
 
       biquadFilter.connect(analyser);
-      context.connect(biquadFilter);
+      source.connect(biquadFilter);
 
       var buffer = [];
 
