@@ -29,12 +29,8 @@
       var source = context.createMediaStreamSource(stream);
       var processor = context.createScriptProcessor(4096, 1, 1);
 
-      var biquadFilter = context.createBiquadFilter();
-      biquadFilter.type = "lowpass";
-      biquadFilter.frequency.value = 1800;
-      source.connect(biquadFilter);
-
       var buffer = [];
+      var output = [40960];
 
       source.connect(processor);
       processor.connect(context.destination);
@@ -48,7 +44,8 @@
         }
 
         if(buffer.length === 40960) {
-          pitch_calc(buffer, buffer.length, e.inputBuffer.sampleRate);
+          low_pass();
+          pitch_calc(output, output.length, e.inputBuffer.sampleRate);
           buffer.length = 0;
         }
       };
@@ -61,8 +58,17 @@
       for (var i = 0; i < size; i++) {
         buffer.push(samples[i]);
       }
-
       return buffer;
+    }
+
+    function low_pass() {
+      var lastinput = 0;
+
+      for(var i = 0; i < buffer.length; i++) {
+        output[i] = (buffer[i] + lastinput) / 2;
+        lastinput += buffer[i];
+      }
+      return output;
     }
 
     //function for pitch detection using zero crossing
