@@ -29,6 +29,14 @@
       var source = context.createMediaStreamSource(stream);
       var processor = context.createScriptProcessor(4096, 1, 1);
 
+      biquadFilter.type = "lowpass";
+      biquadFilter.frequency.value = 1800;
+
+      var analyser = context.createAnalyser();
+
+      biquadFilter.connect(analyser);
+      context.connect(biquadFilter);
+
       var buffer = [];
 
       source.connect(processor);
