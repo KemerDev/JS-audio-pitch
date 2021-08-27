@@ -44,10 +44,11 @@
         }
 
         if(buffer.length === 40960) {
-          low_pass();
+          low_pass(buffer, buffer.length);
           pitch_calc(output, output.length, e.inputBuffer.sampleRate);
           buffer.length = 0;
           output.length = 0;
+          output = [40960];
         }
       };
 
@@ -62,12 +63,12 @@
       return buffer;
     }
 
-    function low_pass() {
+    function low_pass(samples, size) {
       var lastinput = 0;
 
-      for(var i = 0; i < buffer.length; i++) {
-        output[i] = (buffer[i] + lastinput) / 2;
-        lastinput += buffer[i];
+      for(var i = 0; i < size; i++) {
+        output[i] = (samples[i] + lastinput) / 2;
+        lastinput += samples[i];
       }
       return output;
     }
