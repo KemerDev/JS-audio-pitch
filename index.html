@@ -30,6 +30,7 @@
       var processor = context.createScriptProcessor(4096, 1, 1);
 
       var buffer = [];
+      var output = [];
 
       source.connect(processor);
       processor.connect(context.destination);
@@ -43,14 +44,13 @@
         }
 
         if(buffer.length === 40960) {
-          var output = [40960];
-          low_pass(buffer, buffer.length);
+          buffer = low_pass(buffer, buffer.length);
           pitch_calc(output, output.length, e.inputBuffer.sampleRate);
+
           buffer.length = 0;
           output.length = 0;
         }
       };
-
 
     //fill a big buffer, the bigger the buffer the more accurate the detection
 
