@@ -29,7 +29,7 @@
       var source = context.createMediaStreamSource(stream);
       var processor = context.createScriptProcessor(4096, 1, 1);
 
-      var biquadFilter = audioContext.createBiquadFilter();
+      var biquadFilter = context.createBiquadFilter();
       biquadFilter.type = "lowpass";
       biquadFilter.frequency.value = 1800;
 
