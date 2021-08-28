@@ -43,10 +43,9 @@
           text.innerHTML = 0 + " hz";
         }
 
-        if(buffer.length === 40960) {
+        if(buffer.length === 16384) {
 
           low_pass(buffer, buffer.length);
-          low_pass(output, output.length);
           pitch_calc(output, output.length, e.inputBuffer.sampleRate);
 
           buffer.length = 0;
