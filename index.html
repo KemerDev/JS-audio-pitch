@@ -4,19 +4,23 @@
     <meta charset="utf-8">
     <title>pitch detection</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+          integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script type="text/javascript" src="graph.js"></script>
   </head>
-  <body>
+  <body style="position: relative;">
     <audio id="capture"></audio>
     <div class="contain">
       <div id="text" class="main-text">
       </div>
     </div>
+    <div style="width: 1500; height: 200px; position: absolute;">
+      <canvas id="Mycanvas"></canvas>
+    </div>
   </body>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="crossorigin="anonymous">
-  </script>
 
   <script>
     const cap = document.getElementById('capture');
@@ -24,13 +28,18 @@
     const handleSuccess = function(stream) {
       const text = document.getElementById('text');
 
-      var context = new AudioContext();
+      var context = new AudioContext({
+        latencyHint: 'interactive',
+        sampleRate: 48000,
+      });
 
       var source = context.createMediaStreamSource(stream);
-      var processor = context.createScriptProcessor(4096, 1, 1);
+      var processor = context.createScriptProcessor(16384, 1, 1);
 
       var buffer = [];
       var output = [];
+      var data = [];
+      var xaxis = [];
 
       source.connect(processor);
       processor.connect(context.destination);
@@ -38,27 +47,44 @@
       processor.onaudioprocess = function(e) {
 
         if(e.inputBuffer.getChannelData(0)[0] > 0.001 || e.inputBuffer.getChannelData(0)[0] < -0.001) {
-          create_buff(e.inputBuffer.getChannelData(0), e.inputBuffer.length);
+          create_buff(e.inputBuffer.getChannelData(0), e.inputBuffer.length); 
         } else {
           text.innerHTML = 0 + " hz";
         }
 
-        if(buffer.length === 16384) {
+        low_pass(buffer, buffer.length);
+        data = max_absolute(autocorrelation(output));
 
-          low_pass(buffer, buffer.length);
-          pitch_calc(output, output.length, e.inputBuffer.sampleRate);
+        pitch_calc(data, data.length, e.inputBuffer.sampleRate);
 
-          buffer.length = 0;
-          output.length = 0;
-        }
+        /*var ctx = document.getElementById("Mycanvas");
+        var mychart = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: xaxis,
+              datasets: [{
+                fill: false,
+                pointRadius: 0,
+                borderColor: "rgba(0,0,255,0.5)",
+                data: data
+              }]
+            }
+          });*/
+
+        buffer.length = 0;
+        output.length = 0;
+        data.length = 0;
       };
 
     //fill a big buffer, the bigger the buffer the more accurate the detection
-
     function create_buff(samples, size) {
 
       for (var i = 0; i < size; i++) {
         buffer.push(samples[i]);
+      }
+
+      for(var j = 0; j < size; j++){
+        xaxis.push(j);
       }
 
       return buffer;
@@ -75,15 +101,39 @@
       return output;
     }
 
-    //function for pitch detection using zero crossing
+    function rxx(l, N, x) {
+      var sum = 0;
 
+      for(var i = 0; i <= N - l - 1; i++){
+        sum += x[i] * x[i + l];
+      }
+
+      return sum;
+    }
+
+    function autocorrelation(samples) {
+      var correlation = [];
+
+      for(var lag = 0; lag < samples.length; lag++) {
+        correlation[lag] = rxx(lag, samples.length, samples);
+      }
+
+      return correlation;
+    }
+
+    function max_absolute(samples) {
+      var xMax = Math.abs(Math.max(...samples));
+      return samples.map(x => x / xMax);
+    }
+
+    //function for pitch detection using zero crossing
     function pitch_calc(samples, size, sample_rate) {
       var cross = 0;
       var cycles;
       var frequency = 0;
       var epoch;
 
-      for(var i = 0; i < 4096 - 1; i++) {
+      for(var i = 0; i < size - 1; i++) {
         if((samples[i] > 0 && samples[i + 1] <= 0) || (samples[i] < 0 && samples[i + 1] >= 0)) {
           cross++;
         }
@@ -92,11 +142,12 @@
       epoch = size / sample_rate;
       cycles = cross / 2;
       frequency = cycles / epoch;
+      
+      if(Number(frequency).toFixed(1) < 700) {
+        console.log(Number(frequency).toFixed(1));
 
-
-      console.log(Number(frequency).toFixed(1));
-
-      text.innerHTML = Number(frequency).toFixed(1);
+        text.innerHTML = Number(frequency).toFixed(1);
+      }
 
       /*$.getJSON("notes.json", function(data) {
         $(document).ready(function() {
